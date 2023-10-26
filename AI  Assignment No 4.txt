@@ -1,0 +1,42 @@
+class Graph:
+    def __init__(self, n):
+        self.V = n
+        self.graph = [[0 for _ in range(n)] for _ in range(n)]
+
+def is_safe(graph, v, pos, c):
+    for i in range(v):
+        if graph.graph[v][i] == 1 and c == pos[i]:
+            return False
+    return True
+
+def graph_coloring(graph, m, v, pos):
+    if v == graph.V:
+        return True
+
+    for c in range(1, m + 1):
+        if is_safe(graph, v, pos, c):
+            pos[v] = c
+            if graph_coloring(graph, m, v + 1, pos):
+                return True
+            pos[v] = 0
+
+def graph_coloring_solution(graph, m):
+    pos = [0] * graph.V
+    if not graph_coloring(graph, m, 0, pos):
+        print("Solution does not exist")
+    else:
+        print("Solution exists: Following are the assigned colors:")
+        for color in pos:
+            print(color, end=" ")
+
+if __name__ == "__main__":
+    num_vertices = int(input("Enter the number of n: "))
+    g = Graph(num_vertices)
+
+    print("Enter the adjacency matrix (1 for connected, 0 for not connected):")
+    for i in range(num_vertices):
+        g.graph[i] = list(map(int, input().split()))
+
+    num_colors = int(input("Enter the number of colors available: "))
+
+    graph_coloring_solution(g, num_colors)
